@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Pipeline model yükleniyor
 model = joblib.load("flight_pipeline.pkl")
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "HEAD"])
 def home():
     return render_template("form.html")
 
