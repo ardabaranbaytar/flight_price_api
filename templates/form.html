@@ -4,38 +4,53 @@
     <meta charset="UTF-8">
     <title>Uçak Bileti Fiyat Tahmini</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f7fa;
             margin: 0;
             padding: 0;
         }
+
         .container {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
-            padding: 50px;
-            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px;
+            max-width: 1000px;
+            margin: auto;
+            gap: 20px;
         }
+
         form {
-            width: 60%;
+            flex: 1;
             background-color: #ffffff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            min-width: 300px;
         }
+
         form label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: bold;
         }
-        form input, form select {
+
+        form input,
+        form select {
             width: 100%;
             padding: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 4px;
             border: 1px solid #ccc;
+            font-size: 14px;
         }
+
         form button {
             background-color: #007bff;
             color: white;
@@ -43,20 +58,39 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
         }
+
         .prediction-box {
-            width: 30%;
+            flex: 0 0 250px;
             background-color: #e8f5e9;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 200px;
+            text-align: center;
         }
+
         .prediction-box h3 {
-            font-size: 24px;
+            font-size: 20px;
             color: #388e3c;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .prediction-box {
+                width: 100%;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -118,3 +152,4 @@
     </div>
 </body>
 </html>
+
