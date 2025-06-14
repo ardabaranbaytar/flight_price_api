@@ -4,36 +4,34 @@ import joblib
 
 app = Flask(__name__)
 
-# Pipeline model yükleniyor
+# Model yükleniyor
 model = joblib.load("flight_pipeline.pkl")
 
-@app.route("/", methods=["GET", "HEAD"])
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("form.html")
+    prediction = None
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    try:
-        # Form verilerini al
-        form_data = {
-            "airline": request.form["airline"],
-            "source_city": request.form["source_city"],
-            "departure_time": request.form["departure_time"],
-            "stops": request.form["stops"],
-            "arrival_time": request.form["arrival_time"],
-            "destination_city": request.form["destination_city"],
-            "duration": float(request.form["duration"]),
-            "days_left": int(request.form["days_left"]),
-        }
+    if request.method == "POST":
+        try:
+            # Form verilerini al
+            form_data = {
+                "airline": request.form.get("airline"),
+                "source_city": request.form.get("source_city"),
+                "destination_city": request.form.get("destination_city"),
+                "stops": request.form.get("stops"),
+                "duration": float(request.form.get("duration")),
+                "days_left": int(request.form.get("days_left")),
+            }
 
-        df = pd.DataFrame([form_data])  # Tek satırlık DataFrame oluştur
-        prediction = round(model.predict(df)[0], 2)  # Tahmin yap
+            df = pd.DataFrame([form_data])
+            prediction = round(model.predict(df)[0], 2)
 
-        return render_template("form.html", prediction=prediction)
+        except Exception as e:
+            return f"<h3>Hata oluştu: {str(e)}</h3>"
 
-    except Exception as e:
-        return f"<p>Hata oluştu: {str(e)}</p>"
+    return render_template("form.html", prediction=prediction)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
