@@ -1,22 +1,22 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import joblib
+import xgboost as xgb
 import pandas as pd
 import os
 
 app = Flask(__name__)
 
-# Veritabanı konfigürasyonu (mutlak path ile)
+# Veritabanı ayarı
 basedir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(basedir, 'flights.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "flights.db")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-# Tahmin modeli yükle
-model = joblib.load(os.path.join(basedir, "xgboost_flight_price_model.pkl"))
+# Modeli yükle
+model = xgb.XGBRegressor()
+model.load_model("flight_price_xgb_model.json")
 
-# Veritabanı modeli tanımı
+# SQLAlchemy modeli
 class FlightPrediction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     airline = db.Column(db.String(50))
@@ -29,61 +29,29 @@ class FlightPrediction(db.Model):
     days_left = db.Column(db.Integer)
     predicted_price = db.Column(db.Float)
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        # Form verilerini al
-        input_data = {
-            "airline": request.form["airline"],
-            "source_city": request.form["source_city"],
-            "departure_time": request.form["departure_time"],
-            "stops": request.form["stops"],
-            "arrival_time": request.form["arrival_time"],
-            "destination_city": request.form["destination_city"],
-            "duration": float(request.form["duration"]),
-            "days_left": int(request.form["days_left"])
-        }
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        data = request.get_json()
 
-        # Tahmini yap
-        df = pd.DataFrame([input_data])
-        prediction = round(model.predict(df)[0], 2)
+        features = pd.DataFrame([data])
 
-        # Aynı veri daha önce eklenmiş mi kontrol et
-        existing = FlightPrediction.query.filter_by(
-            airline=input_data["airline"],
-            source_city=input_data["source_city"],
-            departure_time=input_data["departure_time"],
-            stops=input_data["stops"],
-            arrival_time=input_data["arrival_time"],
-            destination_city=input_data["destination_city"],
-            duration=input_data["duration"],
-            days_left=input_data["days_left"],
-            predicted_price=prediction
-        ).first()
+        prediction = round(model.predict(features)[0], 2)
 
-        if not existing:
-            new_prediction = FlightPrediction(
-                airline=input_data["airline"],
-                source_city=input_data["source_city"],
-                departure_time=input_data["departure_time"],
-                stops=input_data["stops"],
-                arrival_time=input_data["arrival_time"],
-                destination_city=input_data["destination_city"],
-                duration=input_data["duration"],
-                days_left=input_data["days_left"],
-                predicted_price=prediction
-            )
-            db.session.add(new_prediction)
-            db.session.commit()
+        record = FlightPrediction(**data, predicted_price=prediction)
+        db.session.add(record)
+        db.session.commit()
 
-        return render_template("index.html", prediction=prediction)
+        return jsonify({"predicted_price": prediction}), 200
 
-    return render_template("index.html", prediction=None)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/", methods=["GET"])
+def home():
+    return "✈️ Flight Price Prediction API is up and running!"
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-
-
