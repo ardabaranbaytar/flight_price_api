@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    padding: 40px;
+    background-color: #ffa726;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 60px;
+}
+
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 50%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+}
+
+form label {
+    font-weight: bold;
+    font-size: 14px;
+    grid-column: span 1;
+}
+
+form select,
+form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+
+form input[type="submit"] {
+    grid-column: span 2;
+    width: 100%;
+    background-color: #ef6c00;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+    background-color: #e65100;
+}
+
+.prediction {
+    background-color: #fffbe6;
+    border: 2px dashed #ff8f00;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 24px;
+    color: #4e342e;
+    font-weight: bold;
+    min-width: 280px;
+    height: fit-content;
+    align-self: center;
+    margin-left: 60px;     /* Formdan boşluk */
+    margin-right: 40px;    /* Sağ boşluk = sağa kaydırır */
+}
+
