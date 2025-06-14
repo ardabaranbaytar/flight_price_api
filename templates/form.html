@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Uçuş Fiyat Tahmini</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <form method="POST" action="/predict">
+        <label>Havayolu:</label>
+        <select name="airline" required>
+            <option value="AirAsia">AirAsia</option>
+            <option value="Air_India">Air_India</option>
+            <option value="GO_FIRST">GO_FIRST</option>
+            <option value="Indigo">Indigo</option>
+            <option value="SpiceJet">SpiceJet</option>
+            <option value="Vistara">Vistara</option>
+        </select>
+
+        <label>Kalkış Şehri:</label>
+        <select name="source_city" required>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Mumbai">Mumbai</option>
+        </select>
+
+        <label>Kalkış Saati:</label>
+        <select name="departure_time" required>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Early_Morning">Early_Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Late_Night">Late_Night</option>
+            <option value="Morning">Morning</option>
+            <option value="Night">Night</option>
+        </select>
+
+        <label>Aktarma:</label>
+        <select name="stops" required>
+            <option value="zero">0</option>
+            <option value="one">1</option>
+            <option value="two_or_more">2+</option>
+        </select>
+
+        <label>Varış Saati:</label>
+        <select name="arrival_time" required>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Early_Morning">Early_Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Late_Night">Late_Night</option>
+            <option value="Morning">Morning</option>
+            <option value="Night">Night</option>
+        </select>
+
+        <label>Varış Şehri:</label>
+        <select name="destination_city" required>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Mumbai">Mumbai</option>
+        </select>
+
+        <label>Süre (dk):</label>
+        <input type="number" name="duration" required>
+
+        <label>Gün Sayısı:</label>
+        <input type="number" name="days_left" required>
+
+        <input type="submit" value="Tahmin Et">
+    </form>
+
+    {% if prediction is defined %}
+    <div class="prediction">
+        Tahmin Edilen Fiyat: {{ prediction }} TL
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
