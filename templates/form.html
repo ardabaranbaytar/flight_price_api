@@ -1,61 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Flight Price Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Uçak Bileti Fiyat Tahmini</title>
+    <style>
+        body {
+            background-color: #ffa726;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #e65100;
+            color: white;
+            font-size: 16px;
+            border: none;
+            margin-top: 20px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #bf360c;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Flight Price Prediction</h1>
         <form action="/predict" method="post">
-            <label for="airline">Airline:</label>
-            <select name="airline" id="airline" required>
-                <option value="">--Select Airline--</option>
-                <option value="Jet Airways">Jet Airways</option>
-                <option value="IndiGo">IndiGo</option>
-                <option value="Air India">Air India</option>
-                <option value="SpiceJet">SpiceJet</option>
-                <option value="GoAir">GoAir</option>
-                <option value="Multiple carriers">Multiple carriers</option>
+            <h2>Uçak Bileti Fiyat Tahmini</h2>
+
+            <label for="airline">Havayolu:</label>
+            <select name="airline" required>
+                <option value="">--Seç--</option>
+                <option value="AirAsia">AirAsia</option>
                 <option value="Vistara">Vistara</option>
+                <option value="Air_India">Air India</option>
+                <option value="Indigo">IndiGo</option>
+                <option value="GO_FIRST">Go First</option>
             </select>
 
-            <label for="source">Source:</label>
-            <select name="source" id="source" required>
-                <option value="">--Select Source--</option>
-                <option value="Delhi">Delhi</option>
+            <label for="source_city">Kalkış Şehri:</label>
+            <select name="source_city" required>
+                <option value="">--Seç--</option>
                 <option value="Kolkata">Kolkata</option>
-                <option value="Mumbai">Mumbai</option>
                 <option value="Chennai">Chennai</option>
+                <option value="Mumbai">Mumbai</option>
             </select>
 
-            <label for="destination">Destination:</label>
-            <select name="destination" id="destination" required>
-                <option value="">--Select Destination--</option>
-                <option value="Cochin">Cochin</option>
-                <option value="Delhi">Delhi</option>
-                <option value="New Delhi">New Delhi</option>
-                <option value="Hyderabad">Hyderabad</option>
+            <label for="destination_city">Varış Şehri:</label>
+            <select name="destination_city" required>
+                <option value="">--Seç--</option>
                 <option value="Kolkata">Kolkata</option>
+                <option value="Hyderabad">Hyderabad</option>
             </select>
 
-            <label for="dep_time">Departure Time:</label>
-            <input type="datetime-local" name="dep_time" id="dep_time" required>
-
-            <label for="arrival_time">Arrival Time:</label>
-            <input type="datetime-local" name="arrival_time" id="arrival_time" required>
-
-            <label for="stops">Total Stops:</label>
-            <select name="stops" id="stops" required>
-                <option value="non-stop">Non-Stop</option>
-                <option value="1 stop">1 Stop</option>
-                <option value="2 stops">2 Stops</option>
-                <option value="3 stops">3 Stops</option>
-                <option value="4 stops">4 Stops</option>
+            <label for="stops">Aktarma Sayısı:</label>
+            <select name="stops" required>
+                <option value="non_stop">Direkt (0)</option>
+                <option value="one">Tek Aktarma</option>
+                <option value="two_or_more">2+ Aktarma</option>
             </select>
 
-            <button type="submit">Predict</button>
+            <label for="duration">Uçuş Süresi (dk):</label>
+            <input type="number" name="duration" required min="10" max="1500">
+
+            <label for="days_left">Biletin Alındığı Gün (Kaç gün kala?):</label>
+            <input type="number" name="days_left" required min="0" max="365">
+
+            <button type="submit">Tahmin Et</button>
         </form>
     </div>
 </body>
