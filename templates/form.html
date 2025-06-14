@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Flight Price Prediction</h1>
+        <form action="/predict" method="post">
+            <label for="airline">Airline:</label>
+            <select name="airline" id="airline" required>
+                <option value="">--Select Airline--</option>
+                <option value="Jet Airways">Jet Airways</option>
+                <option value="IndiGo">IndiGo</option>
+                <option value="Air India">Air India</option>
+                <option value="SpiceJet">SpiceJet</option>
+                <option value="GoAir">GoAir</option>
+                <option value="Multiple carriers">Multiple carriers</option>
+                <option value="Vistara">Vistara</option>
+            </select>
+
+            <label for="source">Source:</label>
+            <select name="source" id="source" required>
+                <option value="">--Select Source--</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Chennai">Chennai</option>
+            </select>
+
+            <label for="destination">Destination:</label>
+            <select name="destination" id="destination" required>
+                <option value="">--Select Destination--</option>
+                <option value="Cochin">Cochin</option>
+                <option value="Delhi">Delhi</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+
+            <label for="dep_time">Departure Time:</label>
+            <input type="datetime-local" name="dep_time" id="dep_time" required>
+
+            <label for="arrival_time">Arrival Time:</label>
+            <input type="datetime-local" name="arrival_time" id="arrival_time" required>
+
+            <label for="stops">Total Stops:</label>
+            <select name="stops" id="stops" required>
+                <option value="non-stop">Non-Stop</option>
+                <option value="1 stop">1 Stop</option>
+                <option value="2 stops">2 Stops</option>
+                <option value="3 stops">3 Stops</option>
+                <option value="4 stops">4 Stops</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</body>
+</html>
