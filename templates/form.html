@@ -7,11 +7,20 @@
         body {
             background-color: #ffa726;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        .container {
+        .wrapper {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            height: 100vh;
+        }
+
+        .form-container {
             display: flex;
             justify-content: center;
+            align-items: center;
             padding: 40px;
         }
 
@@ -20,11 +29,12 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            width: 500px;
+            width: 80%;
         }
 
         h2 {
             text-align: center;
+            margin-bottom: 10px;
         }
 
         label {
@@ -58,66 +68,83 @@
             background-color: #bf360c;
         }
 
-        .result-box {
-            margin-top: 25px;
-            padding: 15px;
-            background-color: #fff3e0;
-            border-left: 5px solid #e65100;
-            font-size: 18px;
+        .prediction-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .prediction-result {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <form action="/predict" method="post">
-            <h2>Uçak Bileti Fiyat Tahmini</h2>
+    <div class="wrapper">
+        <!-- Sol tarafta form -->
+        <div class="form-container">
+            <form method="post">
+                <h2>Uçak Bileti Fiyat Tahmini</h2>
 
-            <label for="airline">Havayolu:</label>
-            <select name="airline" required>
-                <option value="">--Seç--</option>
-                <option value="AirAsia">AirAsia</option>
-                <option value="Vistara">Vistara</option>
-                <option value="Air_India">Air India</option>
-                <option value="Indigo">IndiGo</option>
-                <option value="GO_FIRST">Go First</option>
-            </select>
+                <label for="airline">Havayolu:</label>
+                <select name="airline" required>
+                    <option value="">--Seç--</option>
+                    <option value="AirAsia">AirAsia</option>
+                    <option value="Vistara">Vistara</option>
+                    <option value="Air_India">Air India</option>
+                    <option value="Indigo">IndiGo</option>
+                    <option value="GO_FIRST">Go First</option>
+                </select>
 
-            <label for="source_city">Kalkış Şehri:</label>
-            <select name="source_city" required>
-                <option value="">--Seç--</option>
-                <option value="Kolkata">Kolkata</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Mumbai">Mumbai</option>
-            </select>
+                <label for="source_city">Kalkış Şehri:</label>
+                <select name="source_city" required>
+                    <option value="">--Seç--</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Mumbai">Mumbai</option>
+                </select>
 
-            <label for="destination_city">Varış Şehri:</label>
-            <select name="destination_city" required>
-                <option value="">--Seç--</option>
-                <option value="Kolkata">Kolkata</option>
-                <option value="Hyderabad">Hyderabad</option>
-            </select>
+                <label for="destination_city">Varış Şehri:</label>
+                <select name="destination_city" required>
+                    <option value="">--Seç--</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                </select>
 
-            <label for="stops">Aktarma Sayısı:</label>
-            <select name="stops" required>
-                <option value="non_stop">Direkt (0)</option>
-                <option value="one">Tek Aktarma</option>
-                <option value="two_or_more">2+ Aktarma</option>
-            </select>
+                <label for="stops">Aktarma Sayısı:</label>
+                <select name="stops" required>
+                    <option value="">--Seç--</option>
+                    <option value="non_stop">Direkt (0)</option>
+                    <option value="one">Tek Aktarma</option>
+                    <option value="two_or_more">2+ Aktarma</option>
+                </select>
 
-            <label for="duration">Uçuş Süresi (dk):</label>
-            <input type="number" name="duration" required min="10" max="1500">
+                <label for="duration">Uçuş Süresi (dk):</label>
+                <input type="number" name="duration" required min="10" max="1500">
 
-            <label for="days_left">Biletin Alındığı Gün (Kaç gün kala?):</label>
-            <input type="number" name="days_left" required min="0" max="365">
+                <label for="days_left">Biletin Alındığı Gün (Kaç gün kala?):</label>
+                <input type="number" name="days_left" required min="0" max="365">
 
-            <button type="submit">Tahmin Et</button>
+                <button type="submit">Tahmin Et</button>
+            </form>
+        </div>
 
+        <!-- Sağ tarafta tahmin sonucu -->
+        <div class="prediction-box">
             {% if prediction %}
-            <div class="result-box">
-                📍 Tahmini Bilet Fiyatı: <strong>{{ prediction }} ₺</strong>
+            <div class="prediction-result">
+                Tahmini Fiyat: ₹ {{ prediction }}
             </div>
             {% endif %}
-        </form>
+        </div>
     </div>
 </body>
 </html>
