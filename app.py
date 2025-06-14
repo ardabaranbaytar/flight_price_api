@@ -6,13 +6,15 @@ import os
 
 app = Flask(__name__)
 
-# Veritabanı konfigürasyonu
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flights.db'
+# Veritabanı konfigürasyonu (mutlak path ile)
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'flights.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Tahmin modeli yükle
-model = joblib.load("xgboost_flight_price_model.pkl")
+model = joblib.load(os.path.join(basedir, "xgboost_flight_price_model.pkl"))
 
 # Veritabanı modeli tanımı
 class FlightPrediction(db.Model):
@@ -60,7 +62,17 @@ def index():
         ).first()
 
         if not existing:
-            new_prediction = FlightPrediction(**input_data, predicted_price=prediction)
+            new_prediction = FlightPrediction(
+                airline=input_data["airline"],
+                source_city=input_data["source_city"],
+                departure_time=input_data["departure_time"],
+                stops=input_data["stops"],
+                arrival_time=input_data["arrival_time"],
+                destination_city=input_data["destination_city"],
+                duration=input_data["duration"],
+                days_left=input_data["days_left"],
+                predicted_price=prediction
+            )
             db.session.add(new_prediction)
             db.session.commit()
 
@@ -71,7 +83,7 @@ def index():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-
     app.run(debug=True)
+
 
 
