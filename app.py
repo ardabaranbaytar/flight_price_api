@@ -1,62 +1,42 @@
-from flask import Flask, request, jsonify, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request
 import xgboost as xgb
 import pandas as pd
-import os
 
 app = Flask(__name__)
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "flights.db")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
-
 model = xgb.XGBRegressor()
 model.load_model("flight_price_xgb_model.json")
 
-class FlightPrediction(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    airline = db.Column(db.String(50))
-    source_city = db.Column(db.String(50))
-    departure_time = db.Column(db.String(50))
-    stops = db.Column(db.String(20))
-    arrival_time = db.Column(db.String(50))
-    destination_city = db.Column(db.String(50))
-    duration = db.Column(db.Float)
-    days_left = db.Column(db.Integer)
-    predicted_price = db.Column(db.Float)
-
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("form.html")
-
-@app.route("/predict", methods=["POST"])
-def predict():
-    try:
+    if request.method == "POST":
         data = {
-            "airline": request.form.get("airline"),
-            "source_city": request.form.get("source_city"),
-            "departure_time": request.form.get("departure_time"),
-            "stops": request.form.get("stops"),
-            "arrival_time": request.form.get("arrival_time"),
-            "destination_city": request.form.get("destination_city"),
-            "duration": float(request.form.get("duration")),
-            "days_left": int(request.form.get("days_left"))
+            "airline": request.form["airline"],
+            "source_city": request.form["source_city"],
+            "departure_time": request.form["departure_time"],
+            "stops": request.form["stops"],
+            "arrival_time": request.form["arrival_time"],
+            "destination_city": request.form["destination_city"],
+            "duration": float(request.form["duration"]),
+            "days_left": int(request.form["days_left"]),
         }
-
         features = pd.DataFrame([data])
         prediction = round(model.predict(features)[0], 2)
+        return f"<h2>Tahmini Bilet Fiyatı: ₹{prediction}</h2>"
 
-        new_record = FlightPrediction(**data, predicted_price=prediction)
-        db.session.add(new_record)
-        db.session.commit()
-
-        return render_template("result.html", prediction=prediction)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return '''
+        <h1>Uçuş Bilgilerini Gir</h1>
+        <form method="POST">
+            Havayolu: <input name="airline"><br>
+            Kalkış Şehri: <input name="source_city"><br>
+            Kalkış Saati: <input name="departure_time"><br>
+            Aktarma Sayısı: <input name="stops"><br>
+            Varış Saati: <input name="arrival_time"><br>
+            Varış Şehri: <input name="destination_city"><br>
+            Süre (dk): <input name="duration" type="number"><br>
+            Gün Sayısı (days_left): <input name="days_left" type="number"><br>
+            <input type="submit" value="Tahmin Et">
+        </form>
+    '''
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
