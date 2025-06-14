@@ -1,11 +1,13 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import joblib
+import os
 
 app = Flask(__name__)
 
-# Model yükleniyor
-model = joblib.load("flight_pipeline.pkl")
+# Modeli yükle
+model_path = os.path.join(os.path.dirname(__file__), "flight_pipeline.pkl")
+model = joblib.load(model_path)
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -23,15 +25,19 @@ def home():
                 "days_left": int(request.form.get("days_left")),
             }
 
+            # DataFrame oluştur ve tahmin yap
             df = pd.DataFrame([form_data])
             prediction = round(model.predict(df)[0], 2)
 
         except Exception as e:
-            return f"<h3>Hata oluştu: {str(e)}</h3>"
+            return render_template("form.html", prediction=None, error=str(e))
 
     return render_template("form.html", prediction=prediction)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# 🚫 BURAYI RENDER'DA KULLANMA
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+
 
 
