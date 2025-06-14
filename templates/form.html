@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Uçuş Fiyat Tahmini</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">✈️ Uçuş Fiyat Tahmini</h1>
+
+        <form method="POST" action="/predict">
+            <label for="airline">Havayolu:</label>
+            <input type="text" name="airline" class="input" required>
+
+            <label for="source_city">Kalkış Şehri:</label>
+            <input type="text" name="source_city" class="input" required>
+
+            <label for="departure_time">Kalkış Saati:</label>
+            <input type="text" name="departure_time" class="input" required>
+
+            <label for="stops">Aktarma Sayısı:</label>
+            <input type="text" name="stops" class="input" required>
+
+            <label for="arrival_time">Varış Saati:</label>
+            <input type="text" name="arrival_time" class="input" required>
+
+            <label for="destination_city">Varış Şehri:</label>
+            <input type="text" name="destination_city" class="input" required>
+
+            <label for="duration">Süre (dakika):</label>
+            <input type="number" name="duration" class="input" required>
+
+            <label for="days_left">Gün Sayısı (days_left):</label>
+            <input type="number" name="days_left" class="input" required>
+
+            <button type="submit" class="button">Tahmin Et</button>
+        </form>
+    </div>
+</body>
+</html>
