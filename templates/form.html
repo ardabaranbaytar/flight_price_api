@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Price Prediction</title>
+</head>
+<body>
+    <h2>Uçuş Bilgilerini Gir</h2>
+    <form action="/predict" method="post">
+        <label for="airline">Havayolu:</label>
+        <input type="text" name="airline" required><br><br>
+
+        <label for="source_city">Kalkış Şehri:</label>
+        <input type="text" name="source_city" required><br><br>
+
+        <label for="departure_time">Kalkış Saati:</label>
+        <input type="text" name="departure_time" required><br><br>
+
+        <label for="stops">Aktarma Sayısı:</label>
+        <input type="text" name="stops" required><br><br>
+
+        <label for="arrival_time">Varış Saati:</label>
+        <input type="text" name="arrival_time" required><br><br>
+
+        <label for="destination_city">Varış Şehri:</label>
+        <input type="text" name="destination_city" required><br><br>
+
+        <label for="duration">Süre (dk):</label>
+        <input type="number" name="duration" required><br><br>
+
+        <input type="submit" value="Tahmin Et">
+    </form>
+</body>
+</html>
