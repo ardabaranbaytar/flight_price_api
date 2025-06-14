@@ -5,146 +5,116 @@
     <title>Uçak Bileti Fiyat Tahmini</title>
     <style>
         body {
-            background-color: #ffa726;
             font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
             margin: 0;
             padding: 0;
         }
-
-        .wrapper {
-            display: grid;
-            grid-template-columns: 60% 40%;
-            height: 100vh;
-        }
-
-        .form-container {
+        .container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 50px;
+            gap: 40px;
         }
-
         form {
-            background-color: white;
+            width: 60%;
+            background-color: #ffffff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        label {
+        form label {
             display: block;
-            margin-top: 15px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
-
-        input[type="number"],
-        select {
+        form input, form select {
             width: 100%;
             padding: 8px;
-            margin-top: 5px;
-            border-radius: 6px;
+            margin-bottom: 20px;
+            border-radius: 4px;
             border: 1px solid #ccc;
         }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #e65100;
+        form button {
+            background-color: #007bff;
             color: white;
-            font-size: 16px;
+            padding: 10px 15px;
             border: none;
-            margin-top: 20px;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
         }
-
-        button:hover {
-            background-color: #bf360c;
-        }
-
         .prediction-box {
+            width: 30%;
+            background-color: #e8f5e9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100%;
+            justify-content: center;
         }
-
-        .prediction-result {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
+        .prediction-box h3 {
+            font-size: 24px;
+            color: #388e3c;
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Sol tarafta form -->
-        <div class="form-container">
-            <form method="post">
-                <h2>Uçak Bileti Fiyat Tahmini</h2>
+    <div class="container">
+        <form action="/" method="POST">
+            <label for="airline">Havayolu:</label>
+            <select name="airline" required>
+                <option value="">Seçiniz</option>
+                <option value="AirAsia">AirAsia</option>
+                <option value="Indigo">Indigo</option>
+                <option value="SpiceJet">SpiceJet</option>
+                <option value="Vistara">Vistara</option>
+                <option value="GO FIRST">GO FIRST</option>
+            </select>
 
-                <label for="airline">Havayolu:</label>
-                <select name="airline" required>
-                    <option value="">--Seç--</option>
-                    <option value="AirAsia">AirAsia</option>
-                    <option value="Vistara">Vistara</option>
-                    <option value="Air_India">Air India</option>
-                    <option value="Indigo">IndiGo</option>
-                    <option value="GO_FIRST">Go First</option>
-                </select>
+            <label for="source_city">Kalkış Şehri:</label>
+            <select name="source_city" required>
+                <option value="">Seçiniz</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Hyderabad">Hyderabad</option>
+            </select>
 
-                <label for="source_city">Kalkış Şehri:</label>
-                <select name="source_city" required>
-                    <option value="">--Seç--</option>
-                    <option value="Kolkata">Kolkata</option>
-                    <option value="Chennai">Chennai</option>
-                    <option value="Mumbai">Mumbai</option>
-                </select>
+            <label for="destination_city">Varış Şehri:</label>
+            <select name="destination_city" required>
+                <option value="">Seçiniz</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Hyderabad">Hyderabad</option>
+            </select>
 
-                <label for="destination_city">Varış Şehri:</label>
-                <select name="destination_city" required>
-                    <option value="">--Seç--</option>
-                    <option value="Kolkata">Kolkata</option>
-                    <option value="Hyderabad">Hyderabad</option>
-                </select>
+            <label for="stops">Aktarma Sayısı:</label>
+            <select name="stops" required>
+                <option value="">Seçiniz</option>
+                <option value="zero">0</option>
+                <option value="one">1</option>
+                <option value="two_or_more">2 veya daha fazla</option>
+            </select>
 
-                <label for="stops">Aktarma Sayısı:</label>
-                <select name="stops" required>
-                    <option value="">--Seç--</option>
-                    <option value="non_stop">Direkt (0)</option>
-                    <option value="one">Tek Aktarma</option>
-                    <option value="two_or_more">2+ Aktarma</option>
-                </select>
+            <label for="duration">Süre (saat):</label>
+            <input type="number" step="0.1" name="duration" required>
 
-                <label for="duration">Uçuş Süresi (dk):</label>
-                <input type="number" name="duration" required min="10" max="1500">
+            <label for="days_left">Kalan Gün:</label>
+            <input type="number" name="days_left" required>
 
-                <label for="days_left">Biletin Alındığı Gün (Kaç gün kala?):</label>
-                <input type="number" name="days_left" required min="0" max="365">
+            <button type="submit">Tahmin Et</button>
+        </form>
 
-                <button type="submit">Tahmin Et</button>
-            </form>
-        </div>
-
-        <!-- Sağ tarafta tahmin sonucu -->
+        {% if prediction is not none %}
         <div class="prediction-box">
-            {% if prediction %}
-            <div class="prediction-result">
-                Tahmini Fiyat: ₹ {{ prediction }}
-            </div>
-            {% endif %}
+            <h3>Fiyat Tahmini: {{ prediction }} TL</h3>
         </div>
+        {% endif %}
     </div>
 </body>
 </html>
