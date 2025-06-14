@@ -1,3 +1,4 @@
+<!-- templates/form.html -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -6,40 +7,40 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <form method="POST" action="/predict">
-            <label>Havayolu:</label>
-            <input type="text" name="airline" required>
+<div class="container">
+    <form method="POST" action="/predict">
+        <label>Havayolu:</label>
+        <input type="text" name="airline" required>
 
-            <label>Kalkış Şehri:</label>
-            <input type="text" name="source_city" required>
+        <label>Kalkış Şehri:</label>
+        <input type="text" name="source_city" required>
 
-            <label>Kalkış Saati:</label>
-            <input type="text" name="departure_time" required>
+        <label>Kalkış Saati:</label>
+        <input type="text" name="departure_time" required>
 
-            <label>Aktarma:</label>
-            <input type="text" name="stops" required>
+        <label>Aktarma:</label>
+        <input type="text" name="stops" required>
 
-            <label>Varış Saati:</label>
-            <input type="text" name="arrival_time" required>
+        <label>Varış Saati:</label>
+        <input type="text" name="arrival_time" required>
 
-            <label>Varış Şehri:</label>
-            <input type="text" name="destination_city" required>
+        <label>Varış Şehri:</label>
+        <input type="text" name="destination_city" required>
 
-            <label>Süre (dk):</label>
-            <input type="number" name="duration" required>
+        <label>Süre (dk):</label>
+        <input type="number" name="duration" required>
 
-            <label>Gün Sayısı:</label>
-            <input type="number" name="days_left" required>
+        <label>Gün Sayısı:</label>
+        <input type="number" name="days_left" required>
 
-            <input type="submit" value="Tahmin Et">
-        </form>
+        <input type="submit" value="Tahmin Et">
+    </form>
 
-        {% if prediction %}
-        <div class="prediction">
-            Tahmin Edilen Fiyat: {{ prediction }} TL
-        </div>
-        {% endif %}
+    {% if prediction is defined %}
+    <div class="prediction">
+        Tahmin Edilen Fiyat: {{ prediction }} TL
     </div>
+    {% endif %}
+</div>
 </body>
 </html>

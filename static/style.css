@@ -1,9 +1,11 @@
+/* static/style.css */
+
 body {
     margin: 0;
     padding: 40px;
     background-color: #ffa726;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
     box-sizing: border-box;
 }
 
@@ -35,7 +37,8 @@ form label {
 }
 
 form select,
-form input[type="text"] {
+form input[type="text"],
+form input[type="number"] {
     width: 100%;
     padding: 8px;
     border-radius: 6px;
@@ -72,7 +75,6 @@ form input[type="submit"]:hover {
     min-width: 280px;
     height: fit-content;
     align-self: center;
-    margin-left: 60px;     /* Formdan boşluk */
-    margin-right: 40px;    /* Sağ boşluk = sağa kaydırır */
+    margin-left: 60px;
+    margin-right: 40px;
 }
-
