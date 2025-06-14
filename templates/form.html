@@ -58,22 +58,18 @@
             background-color: #bf360c;
         }
 
-        .prediction-box {
-            margin-top: 20px;
+        .result-box {
+            margin-top: 25px;
             padding: 15px;
-            background-color: #e8f5e9;
-            border: 1px solid #2e7d32;
-            border-radius: 6px;
-            color: #2e7d32;
-            text-align: center;
+            background-color: #fff3e0;
+            border-left: 5px solid #e65100;
             font-size: 18px;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <form action="/" method="post">
+        <form action="/predict" method="post">
             <h2>Uçak Bileti Fiyat Tahmini</h2>
 
             <label for="airline">Havayolu:</label>
@@ -117,9 +113,9 @@
             <button type="submit">Tahmin Et</button>
 
             {% if prediction %}
-                <div class="prediction-box">
-                    Tahmin Edilen Bilet Fiyatı: {{ prediction }} TL
-                </div>
+            <div class="result-box">
+                📍 Tahmini Bilet Fiyatı: <strong>{{ prediction }} ₺</strong>
+            </div>
             {% endif %}
         </form>
     </div>
