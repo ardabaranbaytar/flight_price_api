@@ -1,43 +1,20 @@
-from flask import Flask, request
-import xgboost as xgb
+from flask import Flask, request, render_template
 import pandas as pd
-import pickle
+import joblib
 
 app = Flask(__name__)
 
-# Modeli yükle
-model = xgb.XGBRegressor()
-model.load_model("flight_price_xgb_model.json")
-
-# Encoder'ı yükle
-with open("encoder.pkl", "rb") as f:
-    encoder = pickle.load(f)
+# Pipeline model yükleniyor
+model = joblib.load("flight_pipeline.pkl")
 
 @app.route("/", methods=["GET"])
 def home():
-    return """
-    <html>
-    <head><title>Uçuş Tahmini</title></head>
-    <body>
-        <h1>Uçuş Bilgilerini Gir</h1>
-        <form method="POST" action="/predict">
-            <label>Havayolu:</label><input type="text" name="airline"><br>
-            <label>Kalkış Şehri:</label><input type="text" name="source_city"><br>
-            <label>Kalkış Saati:</label><input type="text" name="departure_time"><br>
-            <label>Aktarma:</label><input type="text" name="stops"><br>
-            <label>Varış Saati:</label><input type="text" name="arrival_time"><br>
-            <label>Varış Şehri:</label><input type="text" name="destination_city"><br>
-            <label>Süre (dk):</label><input type="number" name="duration"><br>
-            <label>Gün Sayısı:</label><input type="number" name="days_left"><br>
-            <button type="submit">Tahmin Et</button>
-        </form>
-    </body>
-    </html>
-    """
+    return render_template("form.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+        # Form verilerini al
         form_data = {
             "airline": request.form["airline"],
             "source_city": request.form["source_city"],
@@ -49,18 +26,14 @@ def predict():
             "days_left": int(request.form["days_left"]),
         }
 
-        df = pd.DataFrame([form_data])
+        df = pd.DataFrame([form_data])  # Tek satırlık DataFrame oluştur
+        prediction = round(model.predict(df)[0], 2)  # Tahmin yap
 
-        # Encode et
-        features = encoder.transform(df)
-
-        # Tahmin
-        prediction = round(model.predict(features)[0], 2)
-
-        return f"<h2>Tahmin Edilen Fiyat: {prediction} TL</h2>"
+        return render_template("form.html", prediction=prediction)
 
     except Exception as e:
         return f"<p>Hata oluştu: {str(e)}</p>"
 
 if __name__ == "__main__":
     app.run(debug=True)
+
